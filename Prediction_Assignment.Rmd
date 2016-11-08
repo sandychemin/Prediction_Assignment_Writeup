@@ -100,7 +100,7 @@ corrplot(corMatrix, order = "FPC", method = "color", type = "lower",
          tl.cex = 0.8, tl.col = rgb(0, 0, 0))
 ```
 
-The highly correlated variables are shown in dark colors in the graph above. T
+The highly correlated variables are shown in dark colors in the graph above.
 
 ##4. Prediction Model Building
 Few methods are used to model the regressions (in the Train dataset) and the one with higher accuracy when applied to the Test dataset will be used for the quiz predictions. The methods are: Random Forests, Decision Tree and Generalized Boosted Model, as described below. A Confusion Matrix is plotted at the end.
