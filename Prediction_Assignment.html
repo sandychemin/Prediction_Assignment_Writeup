@@ -337,7 +337,8 @@ plot(confMatGBM$table, col = confMatGBM$byClass,
 <div id="applying-the-selected-model-to-the-test-data" class="section level2">
 <h2>5. Applying the selected Model to the Test Data</h2>
 <p>The accuracy of the 3 modeling methods above are:</p>
-<p>Random Forest : 0.9968 Decision Tree : 0.8291 GBM : 0.9884 Random forest has the best accuracy to predict the 20 quiz results (testing dataset) as shown below.</p>
+ <p>Random Forest : 0.9968 Decision Tree : 0.8291 GBM : 0.9884 </p>
+ <p>Random forest has the best accuracy to predict the 20 quiz results (testing dataset) as shown below.</p>
 <pre class="r"><code>predictTEST &lt;- predict(modFitRandForest, newdata=testing)
 predictTEST</code></pre>
 <pre><code>##  [1] B A B A A E D B A A B C B A E E A B B B
