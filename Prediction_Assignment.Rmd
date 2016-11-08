@@ -1,0 +1,55 @@
+---
+title: "Prediction Assignment Writeup"
+author: "Sandeep Narayanan"
+output: html_document
+---
+
+The goal of this project is to predict the manner in which people did the exercise.
+
+The data for this project come from this source: http://groupware.les.inf.puc-rio.br/har.
+
+## Pre-processing Data
+Several columns of the raw data set have string contaning nothing, so we delete those columns first, and we also delete the first 7 columns: X, user_name, raw_timestamp_part_1, raw_timestamp_part_2, cvtd_timestamp, new_window, num_window. These features are obviously not related to predict the outcome.
+
+```{r}
+library(caret)
+set.seed(12463)
+
+training <- read.csv("pml-training.csv", stringsAsFactors=FALSE)
+training$classe <- as.factor(training$classe)
+training <- training[,-nearZeroVar(training)]
+training <- training[,-c(1,2,3,4,5,6,7)]
+
+```
+
+
+There are many NA values in the data set, so we use KnnImpute method to impute those values. Besides, we try to standardize each features and use PCA to reduce features.
+
+```{r}
+inTrain <- createDataPartition(y=training$classe, p=0.75, list=FALSE)
+training <- training[inTrain,]
+testing <- training[-inTrain,]
+
+preObj <- preProcess(training[,-length(training)],method=c("center", "scale", "knnImpute", "pca"), thresh=0.9)
+clean_data <- predict(preObj,training[,-length(training)])
+```
+
+## Prediction
+
+After getting the clean data set from the above processing, we use Knn method to build model. We use testing data to evaluate the performance of our model. The accuracy is 0.9748. 
+
+```{r}
+modelFit <- train(training$classe ~.,data=clean_data, method="knn")
+test <- predict(preObj, testing[,-length(testing)])
+confusionMatrix(testing$classe, predict(modelFit,test))
+```
+
+
+Finally, we load the testing data file and predict the result as the following:
+```{r}
+testing <- read.csv("pml-testing.csv", stringsAsFactors=FALSE)
+testing <- testing[,names(testing) %in% names(training)]
+
+test <- predict(preObj, testing)
+predict_result <- predict(modelFit, test)
+```
